@@ -1,69 +1,68 @@
-# Documentación Express.js, Socket.IO y Knex.js
+# Express.js, Socket.IO and Knex.js Documentation
 
-Este repositorio contiene tres proyectos desarrollados con Node.js, Express, WebSocket, Knex y Quasar. A continuación se explica cómo funcionan, cómo usarlos y para qué sirve cada uno.
+This repository contains three projects developed using Node.js, Express, WebSocket, Knex, and Quasar. Below is an explanation of how they work, how to use them, and their purpose.
 
 ---
 
-## Índice
+## Index
 
 - [Express.js](#expressjs)
 - [Socket.IO](#socketio)
 - [Knex.js](#knexjs)
-- [Proyecto 1 – serverjs](#-proyecto-1--serverjs)
-- [Proyecto 2 – MI-APP (CRUD + Knex)](#-proyecto-2--mi-app-crud--knex)
-- [Proyecto 3 – websocket3 (WebSocket + Quasar)](#-proyecto-3--websocket3-websocket--quasar)
-
+- [Project 1 – serverjs](#project-1--serverjs)
+- [Project 2 – MI-APP (CRUD + Knex)](#project-2--mi-app-crud--knex)
+- [Project 3 – websocket3 (WebSocket + Quasar)](#project-3--websocket3-websocket--quasar)
 
 ---
 
 ## Express.js
 
-### Crear servidor:
+### Create server:
 ```js
 const express = require('express');
 const app = express();
 ```
 
-### Definir puerto y arrancar el servidor:
+### Define port and start the server:
 ```js
 app.listen(3000, () => {
-  console.log('Servidor en http://localhost:3000');
+  console.log('Server running at http://localhost:3000');
 });
 ```
 
-### Leer datos JSON del body:
+### Parse JSON body:
 ```js
 app.use(express.json());
 ```
 
-### Ruta GET:
+### GET route:
 ```js
 app.get('/hola', (req, res) => {
-  res.send('Hola mundo');
+  res.send('Hello world');
 });
 ```
 
-### Ruta POST:
+### POST route:
 ```js
 app.post('/usuario', (req, res) => {
-  res.json({ datosRecibidos: req.body });
+  res.json({ receivedData: req.body });
 });
 ```
 
-### Enviar JSON:
+### Send JSON:
 ```js
-res.json({ mensaje: 'Todo OK' });
+res.json({ message: 'All good' });
 ```
 
-### Texto plano:
+### Plain text:
 ```js
-res.send('Texto simple');
+res.send('Simple text');
 ```
 
-### Ruta con parámetro:
+### Route with parameter:
 ```js
 app.get('/user/:id', (req, res) => {
-  res.send(`ID recibido: ${req.params.id}`);
+  res.send(`Received ID: ${req.params.id}`);
 });
 ```
 
@@ -71,7 +70,7 @@ app.get('/user/:id', (req, res) => {
 
 ## Socket.IO
 
-### Crear servidor WebSocket:
+### Create WebSocket server:
 ```js
 const express = require('express');
 const http = require('http');
@@ -82,36 +81,36 @@ const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 
 server.listen(3000, () => {
-  console.log('Servidor WebSocket en http://localhost:3000');
+  console.log('WebSocket server at http://localhost:3000');
 });
 ```
 
-### Eventos:
+### Events:
 ```js
 io.on('connection', (socket) => {
-  console.log('Cliente conectado');
+  console.log('Client connected');
 
   socket.on('message', (msg) => {
-    console.log('Mensaje recibido:', msg);
+    console.log('Received message:', msg);
   });
 
-  socket.broadcast.emit('message', { texto: 'Solo a los demás' });
-  socket.emit('message', { texto: 'Solo tú ves esto' });
+  socket.broadcast.emit('message', { text: 'Visible only to others' });
+  socket.emit('message', { text: 'Only you see this' });
 
   socket.on('disconnect', () => {
-    console.log('Cliente desconectado');
+    console.log('Client disconnected');
   });
 });
 ```
 
-### Cliente (frontend):
+### Client (frontend):
 ```js
 import { io } from 'socket.io-client';
 const socket = io('http://localhost:3000');
 
-socket.emit('message', { texto: 'Hola servidor' });
+socket.emit('message', { text: 'Hello server' });
 socket.on('message', (data) => {
-  console.log('Mensaje del servidor:', data);
+  console.log('Message from server:', data);
 });
 ```
 
@@ -125,11 +124,11 @@ db('users').select('*');
 db('users').select('id', 'username');
 db('users').where({ id: 1 });
 db('users').insert({ username: 'juan', password: '1234' });
-db('users').where({ id: 1 }).update({ username: 'nuevoNombre' });
+db('users').where({ id: 1 }).update({ username: 'newName' });
 db('users').where({ id: 1 }).del();
 ```
 
-### Orden y límite:
+### Order and limit:
 ```js
 db('users').orderBy('id', 'desc');
 db('users').limit(5);
@@ -138,36 +137,36 @@ db('users').where('username', 'like', '%juan%').select('id', 'username').limit(3
 
 ---
 
-## 📁 Proyecto 1 – serverjs
+## 📁 Project 1 – serverjs
 
-### 📄 Descripción
-Servidor Express minimalista para probar rutas con Postman y entender cómo funcionan los middlewares.
+### 📄 Description
+Minimal Express server to test routes with Postman and understand how middlewares work.
 
-### 🧱 Tecnologías
+### 🧱 Technologies
 - Express.js
 
-### ⚙️ Funcionalidad
-- Middleware para JSON, texto, raw, urlencoded
-- Rutas GET y POST básicas
-- Uso de parámetros en la URL y body
+### ⚙️ Features
+- Middleware for JSON, text, raw, urlencoded
+- Basic GET and POST routes
+- Use of URL and body parameters
 
-### 📦 Instalación
+### 📦 Installation
 ```bash
 cd serverjs
 npm install
 node index.js
 ```
 
-Servidor en: `http://localhost:3000`
+Server at: `http://localhost:3000`
 
 ---
 
-## 📁 Proyecto 2 – MI-APP (CRUD + Knex)
+## 📁 Project 2 – MI-APP (CRUD + Knex)
 
-### 📄 Descripción
-CRUD de usuarios con autenticación simple. Usa Express y Knex con conexión a base de datos.
+### 📄 Description
+User CRUD with simple authentication. Uses Express and Knex with a database connection.
 
-### 🧱 Tecnologías
+### 🧱 Technologies
 - Express.js
 - Knex.js
 - SQLite / MySQL
@@ -180,39 +179,39 @@ CRUD de usuarios con autenticación simple. Usa Express y Knex con conexión a b
 - `PUT /api/users/:id`
 - `DELETE /api/users/:id`
 
-### 📦 Instalación
+### 📦 Installation
 ```bash
 cd backend
 npm install
 node index.js
 ```
 
-> Asegúrate de tener la tabla `users` creada.
+> Make sure the `users` table exists.
 
 ---
 
-## 📁 Proyecto 3 – websocket3 (WebSocket + Quasar)
+## 📁 Project 3 – websocket3 (WebSocket + Quasar)
 
-### 📄 Descripción
-App de frontend en Quasar que recibe datos por WebSocket y también consulta una ruta HTTP.
+### 📄 Description
+Frontend app in Quasar that receives data via WebSocket and also makes an HTTP request.
 
-### 🧱 Tecnologías
+### 🧱 Technologies
 - Express.js
 - Socket.IO
 - Quasar (Vue 3)
 
-### ⚙️ Funcionalidad
+### ⚙️ Features
 **Backend**:
-- WebSocket emite valores periódicos (`update1`, `update2`, `update3`)
-- `GET /api/mensaje` responde por HTTP
-- Recibe mensajes desde el frontend
+- WebSocket emits periodic values (`update1`, `update2`, `update3`)
+- `GET /api/mensaje` responds via HTTP
+- Receives messages from frontend
 
 **Frontend**:
-- Muestra valores en tiempo real
-- Envío de mensajes vía WebSocket
-- Llamada a HTTP y cambio de página
+- Displays real-time values
+- Sends messages via WebSocket
+- HTTP request and page navigation
 
-### 📦 Instalación
+### 📦 Installation
 **Backend**:
 ```bash
 npm install
@@ -225,19 +224,20 @@ cd websocket3
 quasar dev
 ```
 
-> Backend debe estar corriendo en puerto `3001`.
+> Backend must be running on port `3001`.
 
 ---
 
-## ✅ Requisitos generales
+## ✅ General Requirements
 
 - Node.js
-- `npm install` en cada proyecto
-- Tener base de datos (en MI-APP)
-- `npm install -g @quasar/cli` para usar Quasar
+- `npm install` in each project
+- Have a database (in MI-APP)
+- `npm install -g @quasar/cli` to use Quasar
 
 ---
 
-## ✍️ Autor
+## ✍️ Author
 
 Jonathan Cano
+
